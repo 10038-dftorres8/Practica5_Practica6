@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Composición de Componentes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    container-component {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: auto;
+      border: 2px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    header {
+      background-color: #f2f2f2;
+      padding: 10px;
+      text-align: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #115113;
+      color: white;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #144a17;
+    }
+  </style>
+</head>
+<body>
+
+  <container-component>
+    <my-header slot="header"></my-header>
+    <my-list slot="list"></my-list>
+    <my-form slot="form"></my-form>
+  </container-component>
+
+<script>
+  class MyHeader extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `
+        <header class="mb-4">
+          <h1 class="display-4">FORMULARIO</h1>
+        </header>
+      `;
+    }
+  }
+  customElements.define('my-header', MyHeader);
+</script>
+
+<script>
+  class MyList extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `
+        <ul class="list-group text-center">
+          <li class="list-group-item">UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE</li>
+          <li class="list-group-item">DEPARTAMENTO DE COMPUTACION</li>
+          <li class="list-group-item">INTEGRATIVA</li>
+        </ul>
+      `;
+    }
+  }
+  customElements.define('my-list', MyList);
+
+  class MyForm extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `
+        <form>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo:</label>
+            <input type="email" id="correo" name="correo" class="form-control" required>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-success">Enviar</button>
+          </div>
+        </form>
+      `;
+    }
+  }
+  customElements.define('my-form', MyForm);
+
+
+
+  class ContainerComponent extends HTMLElement {
+    connectedCallback() {
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `
+        <div class="container">
+          <slot name="header"></slot>
+          <slot name="list"></slot>
+          <slot name="form"></slot>
+        </div>
+      `;
+    }
+  }
+  customElements.define('container-component', ContainerComponent);
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+</html>
